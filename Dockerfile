@@ -1,17 +1,17 @@
-FROM node:10-alpine
+FROM node:17
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-
-WORKDIR /home/node/app
+WORKDIR /home/scr/app
 
 COPY package*.json ./
 
-USER node
+RUN npm install prettier -g
 
 RUN npm install
 
-COPY --chown=node:node . .
+COPY . .
 
-EXPOSE 8080
+RUN npm run build
 
-CMD [ "node", "app.js" ]
+EXPOSE 1337
+
+CMD [ "node", "build/server.js" ]
